@@ -1,11 +1,12 @@
 #This code draws heavily from: https://apmonitor.com/pdc/index.php/Main/ProportionalIntegralDerivative
 import numpy as np
 from scipy.integrate import odeint
+
 def constant(i,const=10):
 	return const
 
 class Simulation():
-	def __init__(self,model,algorithm,time_scale,num_pts=100,setpoint=constant,const_sp=10):
+	def __init__(self,model,algorithm,time_scale=10,num_pts=100,setpoint=constant,const_sp=10):
 		self.model = model
 		self.algorithm = algorithm
 		self.setpoint = setpoint
@@ -31,11 +32,11 @@ class Simulation():
 		self.PV[i+1] = odeint(self.model.process.run,self.PV[i],[0,self.delta_t],args=(args,))[-1]
 
 	def simulate(self):
-
 		self.PV[0] = self.model.y0
 		for i in range(self.num_pts):
 			self.sim_step(i)
-			print("Step: {} SP: {} PV: {}".format(i,self.SP[i],self.PV[i]))
+			if i % 25 == 0:
+				print("Step: {} SP: {} PV: {}".format(i,self.SP[i],self.PV[i]))
 		return (self.t_vals,self.PV[:-1],self.U,self.SP,self.e) + self.algorithm.gen_returns()
 
 

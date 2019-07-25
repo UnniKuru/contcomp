@@ -9,12 +9,11 @@ tP = 3
 Kc = 2 / Kp 
 tI = tP / 2
 tD = 0
-time_scale = 10
 
 fO = First_Order(Kp,tP)
 model = Model(fO)
-algorithm = PID_No_Windup(Kc,tI,tD,upper_bound=20)
-sim = Simulation(model,algorithm,time_scale,const_sp=30)
+algorithm = PID_No_Windup(Kc,tI,tD)
+sim = Simulation(model,algorithm,const_sp=30)
 sim.initialize()
 t,PV,U,SP,e,P,I,D = sim.simulate()
 plt.plot(t,PV,label='PV')
